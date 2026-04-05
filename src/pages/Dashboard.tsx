@@ -166,7 +166,7 @@ export default function Dashboard() {
               <div className="p-0 flex flex-col sm:flex-row">
                 <div className={cn(
                   "w-1.5 sm:w-2 shrink-0",
-                  ticket.type === 'issue' ? "bg-red-500" : "bg-blue-500"
+                  ticket.type === 'issue' ? "bg-destructive" : "bg-primary"
                 )} />
                 <div className="p-5 flex-1">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -174,8 +174,8 @@ export default function Dashboard() {
                       <div className={cn(
                         "p-2.5 rounded-xl mt-0.5 transition-colors",
                         ticket.type === 'issue' 
-                          ? "bg-red-50 text-red-600 group-hover:bg-red-100" 
-                          : "bg-blue-50 text-blue-600 group-hover:bg-blue-100"
+                          ? "bg-destructive/10 text-destructive group-hover:bg-destructive/20" 
+                          : "bg-primary/10 text-primary group-hover:bg-primary/20"
                       )}>
                         {ticket.type === 'issue' ? <Bug className="h-5 w-5" /> : <Lightbulb className="h-5 w-5" />}
                       </div>
@@ -264,11 +264,11 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
         {processedProjects.map((project) => (
           <Link key={project.id} to={`/projects/${project.id}`} className="block group">
-            <Card className="h-full transition-all duration-300 hover:shadow-xl hover:shadow-zinc-200/50 dark:hover:shadow-none hover:-translate-y-1 border-border bg-card overflow-hidden flex flex-col">
-              <div className="h-2 bg-purple-500" />
+            <Card className="h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 dark:hover:shadow-none hover:-translate-y-1 border-border bg-card overflow-hidden flex flex-col">
+              <div className="h-2 bg-primary" />
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="p-3 rounded-2xl bg-purple-50 text-purple-600 group-hover:bg-purple-100 transition-colors">
+                  <div className="p-3 rounded-2xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
                     <Briefcase className="h-6 w-6" />
                   </div>
                   {getProjectStatusBadge(project.status)}
@@ -334,7 +334,7 @@ export default function Dashboard() {
             <h3 className="text-3xl font-bold text-foreground font-heading">
               {tickets.filter(t => t.status !== 'resolved' && t.status !== 'closed').length}
             </h3>
-            <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+            <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-primary uppercase tracking-wider">
               <Clock className="w-3 h-3" />
               Needs attention
             </div>
@@ -342,13 +342,13 @@ export default function Dashboard() {
         </Card>
 
         <Card className="p-6 border-border bg-card shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl overflow-hidden relative group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-purple-50 dark:bg-purple-900/20 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500" />
           <div className="relative z-10">
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Projects</p>
             <h3 className="text-3xl font-bold text-foreground font-heading">
               {projects.length}
             </h3>
-            <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-purple-600 uppercase tracking-wider">
+            <div className="mt-4 flex items-center gap-1 text-[10px] font-bold text-primary uppercase tracking-wider">
               <Briefcase className="w-3 h-3" />
               Total requests
             </div>
@@ -359,8 +359,8 @@ export default function Dashboard() {
       {/* Main Content Area with Sidebar */}
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 space-y-6">
-          <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-1">
+          <div className="bg-card p-4 rounded-2xl border border-border shadow-sm flex flex-col lg:flex-row gap-4 items-center">
+            <div className="relative flex-1 w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
                 placeholder="Search requests..." 
@@ -369,9 +369,19 @@ export default function Dashboard() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="flex items-center gap-2">
+            
+            <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full lg:w-auto">
+                <TabsList className="bg-muted p-1 rounded-xl border border-border w-full lg:w-auto">
+                  <TabsTrigger value="all" className="rounded-lg px-4 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest flex-1 lg:flex-none">All</TabsTrigger>
+                  <TabsTrigger value="issues" className="rounded-lg px-4 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest flex-1 lg:flex-none">Issues</TabsTrigger>
+                  <TabsTrigger value="enhancements" className="rounded-lg px-4 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest flex-1 lg:flex-none">Features</TabsTrigger>
+                  <TabsTrigger value="projects" className="rounded-lg px-4 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest flex-1 lg:flex-none">Projects</TabsTrigger>
+                </TabsList>
+              </Tabs>
+
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[160px] h-11 rounded-xl border-border">
+                <SelectTrigger className="w-full lg:w-[160px] h-11 rounded-xl border-border">
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-muted-foreground" />
                     <SelectValue placeholder="Filter Status" />
@@ -401,14 +411,8 @@ export default function Dashboard() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex items-center justify-between mb-6">
-              <TabsList className="bg-muted p-1 rounded-xl border border-border">
-                <TabsTrigger value="all" className="rounded-lg px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest">All</TabsTrigger>
-                <TabsTrigger value="issues" className="rounded-lg px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest">Issues</TabsTrigger>
-                <TabsTrigger value="enhancements" className="rounded-lg px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest">Features</TabsTrigger>
-                <TabsTrigger value="projects" className="rounded-lg px-6 py-2 data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold text-[10px] uppercase tracking-widest">Projects</TabsTrigger>
-              </TabsList>
-              <div className="hidden sm:block text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+            <div className="flex items-center justify-between mb-4 px-2">
+              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 {activeTab === 'all' ? processedTickets.length :
                  activeTab === 'issues' ? issues.length :
                  activeTab === 'enhancements' ? enhancements.length :
@@ -435,35 +439,37 @@ export default function Dashboard() {
 
         {/* Sidebar Actions */}
         <div className="w-full lg:w-80 space-y-6">
-          <Card className="p-6 border-border bg-card rounded-2xl shadow-sm overflow-hidden relative group">
-            <h3 className="text-xl font-bold font-heading mb-6 relative z-10 text-foreground">Quick Actions</h3>
-            <div className="space-y-3 relative z-10">
-              <Button 
-                onClick={() => navigate('/submit-issue')}
-                variant="outline"
-                className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-              >
-                <Bug className="w-4 h-4 mr-3 text-red-500" />
-                Report an Issue
-              </Button>
-              <Button 
-                onClick={() => navigate('/submit-enhancement')}
-                variant="outline"
-                className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-              >
-                <Lightbulb className="w-4 h-4 mr-3 text-blue-500" />
-                Request Feature
-              </Button>
-              <Button 
-                onClick={() => navigate('/request-project')}
-                variant="outline"
-                className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-              >
-                <Briefcase className="w-4 h-4 mr-3 text-purple-500" />
-                New Project
-              </Button>
-            </div>
-          </Card>
+          {user.role === 'admin' && (
+            <Card className="p-6 border-border bg-card rounded-2xl shadow-sm overflow-hidden relative group">
+              <h3 className="text-xl font-bold font-heading mb-6 relative z-10 text-foreground">Quick Actions</h3>
+              <div className="space-y-3 relative z-10">
+                <Button 
+                  onClick={() => navigate('/submit-issue')}
+                  variant="outline"
+                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
+                >
+                  <Bug className="w-4 h-4 mr-3 text-red-500" />
+                  Report an Issue
+                </Button>
+                <Button 
+                  onClick={() => navigate('/submit-enhancement')}
+                  variant="outline"
+                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
+                >
+                  <Lightbulb className="w-4 h-4 mr-3 text-blue-500" />
+                  Request Feature
+                </Button>
+                <Button 
+                  onClick={() => navigate('/request-project')}
+                  variant="outline"
+                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
+                >
+                  <Briefcase className="w-4 h-4 mr-3 text-purple-500" />
+                  New Project
+                </Button>
+              </div>
+            </Card>
+          )}
 
           <Card className="p-6 border-border bg-card rounded-2xl shadow-sm">
             <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Need Help?</h3>

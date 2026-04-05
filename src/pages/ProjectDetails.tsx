@@ -86,11 +86,11 @@ export default function ProjectDetails() {
   const isAdmin = user?.role === 'admin';
 
   const statusColors = {
-    pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    reviewing: 'bg-blue-100 text-blue-800 border-blue-200',
-    proposed: 'bg-purple-100 text-purple-800 border-purple-200',
-    accepted: 'bg-green-100 text-green-800 border-green-200',
-    rejected: 'bg-red-100 text-red-800 border-red-200',
+    pending: 'bg-amber-100 text-amber-800 border-amber-200',
+    reviewing: 'bg-primary/10 text-primary border-primary/20',
+    proposed: 'bg-primary/10 text-primary border-primary/20',
+    accepted: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    rejected: 'bg-destructive/10 text-destructive border-destructive/20',
   };
 
   return (
@@ -228,7 +228,7 @@ export default function ProjectDetails() {
                         <Button 
                           onClick={() => handleStatusChange('accepted')} 
                           disabled={isSubmitting}
-                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
                         >
                           <CheckCircle className="w-4 h-4 mr-2" /> Accept Proposal
                         </Button>
@@ -236,7 +236,7 @@ export default function ProjectDetails() {
                           onClick={() => handleStatusChange('rejected')} 
                           disabled={isSubmitting}
                           variant="outline"
-                          className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                          className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/20"
                         >
                           <XCircle className="w-4 h-4 mr-2" /> Decline
                         </Button>

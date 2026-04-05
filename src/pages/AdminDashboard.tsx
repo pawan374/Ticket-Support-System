@@ -83,11 +83,11 @@ export default function AdminDashboard() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'open':
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Open</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Open</Badge>;
       case 'in-progress':
         return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">In Progress</Badge>;
       case 'resolved':
-        return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Resolved</Badge>;
+        return <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Resolved</Badge>;
       case 'closed':
         return <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Closed</Badge>;
       default:
@@ -100,7 +100,7 @@ export default function AdminDashboard() {
       case 'low':
         return <Badge variant="secondary" className="bg-muted text-muted-foreground">Low</Badge>;
       case 'medium':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-700">Medium</Badge>;
+        return <Badge variant="secondary" className="bg-primary/10 text-primary">Medium</Badge>;
       case 'high':
         return <Badge variant="secondary" className="bg-orange-100 text-orange-700">High</Badge>;
       case 'critical':
@@ -121,15 +121,15 @@ export default function AdminDashboard() {
   const getProjectStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Pending</Badge>;
+        return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">Pending</Badge>;
       case 'reviewing':
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Reviewing</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Reviewing</Badge>;
       case 'proposed':
-        return <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">Proposed</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Proposed</Badge>;
       case 'accepted':
-        return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Accepted</Badge>;
+        return <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Accepted</Badge>;
       case 'rejected':
-        return <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">Rejected</Badge>;
+        return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -140,16 +140,16 @@ export default function AdminDashboard() {
       label: 'Total Tickets', 
       value: tickets.length, 
       icon: TicketIcon, 
-      color: 'text-blue-600', 
-      bg: 'bg-blue-50',
+      color: 'text-primary', 
+      bg: 'bg-primary/10',
       description: 'Open & in-progress'
     },
     { 
       label: 'Project Requests', 
       value: projects.filter(p => p.status === 'pending' || p.status === 'reviewing').length, 
       icon: Briefcase, 
-      color: 'text-purple-600', 
-      bg: 'bg-purple-50',
+      color: 'text-primary', 
+      bg: 'bg-primary/10',
       description: 'Awaiting review'
     },
     { 
@@ -164,8 +164,8 @@ export default function AdminDashboard() {
       label: 'Critical Issues', 
       value: tickets.filter(t => t.priority === 'critical' && t.status !== 'resolved').length, 
       icon: Bug, 
-      color: 'text-red-600', 
-      bg: 'bg-red-50',
+      color: 'text-destructive', 
+      bg: 'bg-destructive/10',
       description: 'Needs attention'
     },
   ];
@@ -432,7 +432,7 @@ export default function AdminDashboard() {
                     >
                       <td className="px-6 py-5">
                         <div className="flex items-center gap-4">
-                          <div className="p-2.5 rounded-xl shrink-0 bg-purple-50 text-purple-600 group-hover:bg-purple-100 transition-colors">
+                          <div className="p-2.5 rounded-xl shrink-0 bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
                             <Briefcase className="h-5 w-5" />
                           </div>
                           <div>

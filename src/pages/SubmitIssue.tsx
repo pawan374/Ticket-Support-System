@@ -128,8 +128,8 @@ export default function SubmitIssue() {
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold font-heading text-foreground flex items-center tracking-tight">
-          <div className="bg-red-50 p-2 rounded-lg mr-3 border border-red-100">
-            <Bug className="h-6 w-6 text-red-600" />
+          <div className="bg-destructive/10 p-2 rounded-lg mr-3 border border-destructive/20">
+            <Bug className="h-6 w-6 text-destructive" />
           </div>
           Report an Issue
         </h1>
@@ -139,9 +139,9 @@ export default function SubmitIssue() {
       </div>
 
       {error && (
-        <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
-          <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
-          <p className="text-sm text-red-800">{error}</p>
+        <div className="mb-6 bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-start">
+          <AlertCircle className="h-5 w-5 text-destructive mt-0.5 mr-3 flex-shrink-0" />
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
@@ -153,7 +153,7 @@ export default function SubmitIssue() {
           </CardHeader>
           <CardContent className="space-y-6 pt-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Issue Title <span className="text-red-500">*</span></Label>
+              <Label htmlFor="title">Issue Title <span className="text-destructive">*</span></Label>
               <Input
                 type="text"
                 name="title"
@@ -167,7 +167,7 @@ export default function SubmitIssue() {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="projectTitle">Project <span className="text-red-500">*</span></Label>
+                <Label htmlFor="projectTitle">Project <span className="text-destructive">*</span></Label>
                 <Select value={formData.projectTitle} onValueChange={handleProjectChange} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a project" />

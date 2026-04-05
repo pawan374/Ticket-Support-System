@@ -66,7 +66,10 @@ export default function Layout() {
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto py-6 px-3">
+        <div className={cn(
+          "flex-1 overflow-y-auto overflow-x-hidden py-6 px-3 scrollbar-hide",
+          isCollapsed && "items-center"
+        )}>
           <div className="space-y-1">
             {!isCollapsed && (
               <p className="px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4 animate-in fade-in duration-300">Main Menu</p>
@@ -84,13 +87,13 @@ export default function Layout() {
                     isCollapsed ? "justify-center p-3" : "px-3 py-2.5",
                     isActive 
                       ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" 
-                      : "text-muted-foreground hover:bg-secondary hover:text-primary"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   )}
                 >
                   <Icon className={cn(
                     "flex-shrink-0 transition-colors duration-200",
                     isCollapsed ? "h-6 w-6" : "mr-3 h-4 w-4",
-                    isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-primary"
+                    isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-accent-foreground"
                   )} />
                   {!isCollapsed && (
                     <span className="text-sm font-medium animate-in fade-in slide-in-from-left-2 duration-300">{item.name}</span>
@@ -112,7 +115,7 @@ export default function Layout() {
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className={cn(
-              "flex items-center w-full rounded-xl transition-all duration-200 text-muted-foreground hover:bg-secondary hover:text-primary",
+              "flex items-center w-full rounded-xl transition-all duration-200 text-muted-foreground hover:bg-accent hover:text-accent-foreground",
               isCollapsed ? "justify-center p-3" : "px-3 py-2.5"
             )}
             title="Toggle theme"

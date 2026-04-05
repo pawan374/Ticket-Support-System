@@ -215,12 +215,12 @@ export default function TicketDetails() {
           <div className="flex items-center space-x-3">
             <div className={cn(
               "p-2 rounded-lg",
-              ticket.type === 'issue' ? "bg-red-50 border border-red-100" : "bg-blue-50 border border-blue-100"
+              ticket.type === 'issue' ? "bg-destructive/10 border border-destructive/20" : "bg-primary/10 border border-primary/20"
             )}>
               {ticket.type === 'issue' ? (
-                <Bug className="h-5 w-5 text-red-600" />
+                <Bug className="h-5 w-5 text-destructive" />
               ) : (
-                <Lightbulb className="h-5 w-5 text-blue-600" />
+                <Lightbulb className="h-5 w-5 text-primary" />
               )}
             </div>
             <div>
@@ -245,7 +245,7 @@ export default function TicketDetails() {
                 Reopen Ticket
               </Button>
             )}
-            <Button variant="destructive" size="sm" onClick={handleDeleteTicket} className="ml-2 bg-red-600 hover:bg-red-700">
+            <Button variant="destructive" size="sm" onClick={handleDeleteTicket} className="ml-2">
               Delete
             </Button>
           </div>

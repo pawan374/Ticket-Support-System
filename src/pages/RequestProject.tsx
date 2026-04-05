@@ -78,7 +78,7 @@ export default function RequestProject() {
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="title" className="text-sm font-medium text-foreground">Project Title <span className="text-red-500">*</span></label>
+              <label htmlFor="title" className="text-sm font-medium text-foreground">Project Title <span className="text-destructive">*</span></label>
               <input
                 type="text"
                 id="title"
@@ -92,7 +92,7 @@ export default function RequestProject() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="description" className="text-sm font-medium text-foreground">High-Level Description <span className="text-red-500">*</span></label>
+              <label htmlFor="description" className="text-sm font-medium text-foreground">High-Level Description <span className="text-destructive">*</span></label>
               <RichTextEditor
                 value={formData.description}
                 onChange={handleDescriptionChange}
@@ -101,7 +101,7 @@ export default function RequestProject() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="requirements" className="text-sm font-medium text-foreground">Detailed Requirements <span className="text-red-500">*</span></label>
+              <label htmlFor="requirements" className="text-sm font-medium text-foreground">Detailed Requirements <span className="text-destructive">*</span></label>
               <RichTextEditor
                 value={formData.requirements}
                 onChange={handleRequirementsChange}

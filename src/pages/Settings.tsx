@@ -217,7 +217,7 @@ export default function Settings() {
                     </h4>
                     <p className="text-sm text-muted-foreground">Manage devices currently logged into your account.</p>
                   </div>
-                  <Button variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50">Sign out all devices</Button>
+                  <Button variant="outline" className="text-destructive hover:text-destructive hover:bg-destructive/10">Sign out all devices</Button>
                 </div>
               </div>
             </CardContent>
