@@ -62,7 +62,7 @@ export default function Settings() {
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-foreground">{user.displayName}</h3>
                   <p className="text-sm text-muted-foreground flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-emerald-500" /> 
+                    <Shield className="h-4 w-4 text-success" /> 
                     {user.role === 'admin' ? 'Administrator' : 'Client Account'}
                   </p>
                   <Button variant="outline" size="sm" className="mt-2 text-xs h-8">Change Avatar</Button>

@@ -173,11 +173,11 @@ export default function TicketDetails() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'open':
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Open</Badge>;
+        return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Open</Badge>;
       case 'in-progress':
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">In Progress</Badge>;
+        return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">In Progress</Badge>;
       case 'resolved':
-        return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Resolved</Badge>;
+        return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Resolved</Badge>;
       case 'closed':
         return <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Closed</Badge>;
       default:
@@ -190,9 +190,9 @@ export default function TicketDetails() {
       case 'low':
         return <Badge variant="secondary" className="bg-muted text-muted-foreground">Low</Badge>;
       case 'medium':
-        return <Badge variant="secondary" className="bg-blue-100 text-blue-700">Medium</Badge>;
+        return <Badge variant="secondary" className="bg-primary/10 text-primary">Medium</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-700">High</Badge>;
+        return <Badge variant="secondary" className="bg-warning/10 text-warning">High</Badge>;
       case 'critical':
         return <Badge variant="destructive">Critical</Badge>;
       default:
@@ -338,8 +338,8 @@ export default function TicketDetails() {
                           className="relative group rounded-lg overflow-hidden border border-border aspect-video bg-muted hover:border-primary transition-colors"
                         >
                           <img src={url} alt={`Attachment ${index}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <ExternalLink className="w-5 h-5 text-white" />
+                          <div className="absolute inset-0 bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <ExternalLink className="w-5 h-5 text-primary-foreground" />
                           </div>
                         </a>
                       ))}
@@ -411,7 +411,7 @@ export default function TicketDetails() {
                   <div key={attachment.id} className="flex items-start p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary/50 transition-colors cursor-pointer group">
                     <div className={cn(
                       "p-2 rounded-md mr-3 shrink-0",
-                      attachment.type === 'agreement' ? "bg-amber-100 text-amber-700" : "bg-muted text-muted-foreground"
+                      attachment.type === 'agreement' ? "bg-warning/10 text-warning" : "bg-muted text-muted-foreground"
                     )}>
                       {attachment.type === 'agreement' ? <FileSignature className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
                     </div>

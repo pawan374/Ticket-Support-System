@@ -197,7 +197,7 @@ export default function SubmitEnhancement() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description <span className="text-red-500">*</span></Label>
+              <Label htmlFor="description">Description <span className="text-destructive">*</span></Label>
               <RichTextEditor
                 value={formData.description}
                 onChange={handleDescriptionChange}
@@ -263,7 +263,7 @@ export default function SubmitEnhancement() {
                       <button 
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-1 right-1 p-1 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -302,7 +302,7 @@ export default function SubmitEnhancement() {
                       <button 
                         type="button"
                         onClick={() => removeVideo(index)}
-                        className="text-muted-foreground hover:text-red-600 p-1"
+                        className="text-muted-foreground hover:text-destructive p-1"
                       >
                         <X className="h-4 w-4" />
                       </button>

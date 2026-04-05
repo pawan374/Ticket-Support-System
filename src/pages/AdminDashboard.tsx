@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { mockDb, Ticket, ProjectRequest } from '../lib/mockDb';
 import { useAuth } from '../contexts/AuthContext';
 import { format } from 'date-fns';
-import { Shield, Bug, Lightbulb, Search, Filter, UserPlus, Mail, Users, Briefcase, ChevronRight, Ticket as TicketIcon, Clock } from 'lucide-react';
+import { Shield, Bug, Lightbulb, Search, Filter, UserPlus, Mail, Users, Briefcase, ChevronRight, Ticket as TicketIcon, Clock, CheckCircle2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
@@ -85,9 +85,9 @@ export default function AdminDashboard() {
       case 'open':
         return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Open</Badge>;
       case 'in-progress':
-        return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">In Progress</Badge>;
+        return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">In Progress</Badge>;
       case 'resolved':
-        return <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Resolved</Badge>;
+        return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Resolved</Badge>;
       case 'closed':
         return <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Closed</Badge>;
       default:
@@ -100,9 +100,9 @@ export default function AdminDashboard() {
       case 'low':
         return <Badge variant="secondary" className="bg-muted text-muted-foreground">Low</Badge>;
       case 'medium':
-        return <Badge variant="secondary" className="bg-primary/10 text-primary">Medium</Badge>;
+        return <Badge variant="secondary" className="bg-warning/10 text-warning">Medium</Badge>;
       case 'high':
-        return <Badge variant="secondary" className="bg-orange-100 text-orange-700">High</Badge>;
+        return <Badge variant="secondary" className="bg-warning/20 text-warning">High</Badge>;
       case 'critical':
         return <Badge variant="destructive">Critical</Badge>;
       default:
@@ -121,13 +121,13 @@ export default function AdminDashboard() {
   const getProjectStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">Pending</Badge>;
+        return <Badge variant="outline" className="bg-warning/10 text-warning border-warning/20">Pending</Badge>;
       case 'reviewing':
         return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Reviewing</Badge>;
       case 'proposed':
         return <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">Proposed</Badge>;
       case 'accepted':
-        return <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Accepted</Badge>;
+        return <Badge variant="outline" className="bg-success/10 text-success border-success/20">Accepted</Badge>;
       case 'rejected':
         return <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">Rejected</Badge>;
       default:
@@ -153,11 +153,19 @@ export default function AdminDashboard() {
       description: 'Awaiting review'
     },
     { 
+      label: 'Resolved', 
+      value: tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length, 
+      icon: CheckCircle2, 
+      color: 'text-success', 
+      bg: 'bg-success/10',
+      description: 'Completed tickets'
+    },
+    { 
       label: 'Active Clients', 
       value: new Set(tickets.map(t => t.authorEmail)).size, 
       icon: Users, 
-      color: 'text-emerald-600', 
-      bg: 'bg-emerald-50',
+      color: 'text-success', 
+      bg: 'bg-success/10',
       description: 'Unique users'
     },
     { 
@@ -168,6 +176,14 @@ export default function AdminDashboard() {
       bg: 'bg-destructive/10',
       description: 'Needs attention'
     },
+    { 
+      label: 'Pending Projects', 
+      value: projects.filter(p => p.status === 'pending').length, 
+      icon: Clock, 
+      color: 'text-warning', 
+      bg: 'bg-warning/10',
+      description: 'Awaiting review'
+    }
   ];
 
   if (loading) {
@@ -352,7 +368,7 @@ export default function AdminDashboard() {
                 <th className="px-6 py-5 font-bold"></th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-50">
+            <tbody className="divide-y divide-border">
               {showTickets ? (
                 filteredTickets.length === 0 ? (
                   <tr>
@@ -376,7 +392,7 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-4">
                           <div className={cn(
                             "p-2.5 rounded-xl shrink-0 transition-colors",
-                            ticket.type === 'issue' ? "bg-red-50 text-red-600 group-hover:bg-red-100" : "bg-blue-50 text-blue-600 group-hover:bg-blue-100"
+                            ticket.type === 'issue' ? "bg-destructive/10 text-destructive group-hover:bg-destructive/20" : "bg-primary/10 text-primary group-hover:bg-primary/20"
                           )}>
                             {ticket.type === 'issue' ? (
                               <Bug className="h-5 w-5" />

@@ -86,10 +86,10 @@ export default function ProjectDetails() {
   const isAdmin = user?.role === 'admin';
 
   const statusColors = {
-    pending: 'bg-amber-100 text-amber-800 border-amber-200',
+    pending: 'bg-warning/10 text-warning border-warning/20',
     reviewing: 'bg-primary/10 text-primary border-primary/20',
     proposed: 'bg-primary/10 text-primary border-primary/20',
-    accepted: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    accepted: 'bg-success/10 text-success border-success/20',
     rejected: 'bg-destructive/10 text-destructive border-destructive/20',
   };
 
@@ -228,7 +228,7 @@ export default function ProjectDetails() {
                         <Button 
                           onClick={() => handleStatusChange('accepted')} 
                           disabled={isSubmitting}
-                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                          className="flex-1 bg-success hover:bg-success/90 text-success-foreground"
                         >
                           <CheckCircle className="w-4 h-4 mr-2" /> Accept Proposal
                         </Button>

@@ -64,9 +64,9 @@ export default function Dashboard() {
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      'open': 'bg-amber-100 text-amber-800 hover:bg-amber-100/80 border-transparent',
-      'in-progress': 'bg-blue-100 text-blue-800 hover:bg-blue-100/80 border-transparent',
-      'resolved': 'bg-emerald-100 text-emerald-800 hover:bg-emerald-100/80 border-transparent',
+      'open': 'bg-warning/10 text-warning hover:bg-warning/20 border-transparent',
+      'in-progress': 'bg-primary/10 text-primary hover:bg-primary/20 border-transparent',
+      'resolved': 'bg-success/10 text-success hover:bg-success/20 border-transparent',
       'closed': 'bg-muted text-muted-foreground hover:bg-muted/80 border-transparent',
     };
     return (
@@ -80,9 +80,9 @@ export default function Dashboard() {
   const getPriorityBadge = (priority: string) => {
     const styles: Record<string, string> = {
       'low': 'bg-muted text-muted-foreground hover:bg-muted/80 border-transparent',
-      'medium': 'bg-amber-100 text-amber-700 hover:bg-amber-100/80 border-transparent',
-      'high': 'bg-orange-100 text-orange-800 hover:bg-orange-100/80 border-transparent',
-      'critical': 'bg-red-100 text-red-800 hover:bg-red-100/80 border-transparent',
+      'medium': 'bg-warning/10 text-warning hover:bg-warning/20 border-transparent',
+      'high': 'bg-warning/20 text-warning hover:bg-warning/30 border-transparent',
+      'critical': 'bg-destructive/10 text-destructive hover:bg-destructive/20 border-transparent',
     };
     return (
       <Badge variant="outline" className={cn("capitalize", styles[priority] || styles['low'])}>
@@ -93,11 +93,11 @@ export default function Dashboard() {
 
   const getProjectStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      'pending': 'bg-yellow-100 text-yellow-800 border-transparent',
-      'reviewing': 'bg-blue-100 text-blue-800 border-transparent',
-      'proposed': 'bg-purple-100 text-purple-800 border-transparent',
-      'accepted': 'bg-green-100 text-green-800 border-transparent',
-      'rejected': 'bg-red-100 text-red-800 border-transparent',
+      'pending': 'bg-warning/10 text-warning border-transparent',
+      'reviewing': 'bg-primary/10 text-primary border-transparent',
+      'proposed': 'bg-primary/10 text-primary border-transparent',
+      'accepted': 'bg-success/10 text-success border-transparent',
+      'rejected': 'bg-destructive/10 text-destructive border-transparent',
     };
     return (
       <Badge variant="outline" className={cn("capitalize", styles[status] || styles['pending'])}>
@@ -321,14 +321,14 @@ export default function Dashboard() {
               {user?.projectTitle || 'No active project'}
             </h3>
             <div className="flex items-center gap-2 mt-4">
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Active</Badge>
+              <Badge variant="outline" className="bg-success/10 text-success border-success/20">Active</Badge>
               <span className="text-xs text-muted-foreground font-medium">Ongoing development</span>
             </div>
           </div>
         </Card>
 
         <Card className="p-6 border-border bg-card shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl overflow-hidden relative group">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 dark:bg-blue-900/20 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 dark:bg-primary/10 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-500" />
           <div className="relative z-10">
             <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Open Tickets</p>
             <h3 className="text-3xl font-bold text-foreground font-heading">
@@ -412,12 +412,17 @@ export default function Dashboard() {
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="flex items-center justify-between mb-4 px-2">
-              <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                {activeTab === 'all' ? processedTickets.length :
-                 activeTab === 'issues' ? issues.length :
-                 activeTab === 'enhancements' ? enhancements.length :
-                 projects.length} Items Found
-              </div>
+              {(activeTab === 'all' ? processedTickets.length :
+                activeTab === 'issues' ? issues.length :
+                activeTab === 'enhancements' ? enhancements.length :
+                projects.length) > 0 && (
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                  {activeTab === 'all' ? processedTickets.length :
+                   activeTab === 'issues' ? issues.length :
+                   activeTab === 'enhancements' ? enhancements.length :
+                   projects.length} Items Found
+                </div>
+              )}
             </div>
             
             <div className="outline-none w-full">
@@ -438,49 +443,19 @@ export default function Dashboard() {
         </div>
 
         {/* Sidebar Actions */}
-        <div className="w-full lg:w-80 space-y-6">
-          {user.role === 'admin' && (
-            <Card className="p-6 border-border bg-card rounded-2xl shadow-sm overflow-hidden relative group">
-              <h3 className="text-xl font-bold font-heading mb-6 relative z-10 text-foreground">Quick Actions</h3>
-              <div className="space-y-3 relative z-10">
-                <Button 
-                  onClick={() => navigate('/submit-issue')}
-                  variant="outline"
-                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-                >
-                  <Bug className="w-4 h-4 mr-3 text-red-500" />
-                  Report an Issue
-                </Button>
-                <Button 
-                  onClick={() => navigate('/submit-enhancement')}
-                  variant="outline"
-                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-                >
-                  <Lightbulb className="w-4 h-4 mr-3 text-blue-500" />
-                  Request Feature
-                </Button>
-                <Button 
-                  onClick={() => navigate('/request-project')}
-                  variant="outline"
-                  className="w-full justify-start h-12 border-border hover:bg-muted rounded-xl text-foreground font-bold transition-all active:scale-95"
-                >
-                  <Briefcase className="w-4 h-4 mr-3 text-purple-500" />
-                  New Project
-                </Button>
-              </div>
+        {user.role !== 'admin' && (
+          <div className="w-full lg:w-80 space-y-6">
+            <Card className="p-6 border-border bg-card rounded-2xl shadow-sm">
+              <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Need Help?</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-6">
+                Our support team is available Monday to Friday, 9 AM - 6 PM NPT for any urgent queries.
+              </p>
+              <Button variant="outline" className="w-full rounded-xl border-border text-foreground font-bold text-xs h-10 hover:bg-muted">
+                Contact Support
+              </Button>
             </Card>
-          )}
-
-          <Card className="p-6 border-border bg-card rounded-2xl shadow-sm">
-            <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Need Help?</h3>
-            <p className="text-xs text-muted-foreground leading-relaxed mb-6">
-              Our support team is available Monday to Friday, 9 AM - 6 PM NPT for any urgent queries.
-            </p>
-            <Button variant="outline" className="w-full rounded-xl border-border text-foreground font-bold text-xs h-10 hover:bg-muted">
-              Contact Support
-            </Button>
-          </Card>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
