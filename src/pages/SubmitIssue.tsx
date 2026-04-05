@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockDb } from '../lib/mockDb';
+import { mockDb, ProjectRequest } from '../lib/mockDb';
 import { useAuth } from '../contexts/AuthContext';
 import { Bug, AlertCircle, ArrowLeft, Image as ImageIcon, Video, Plus, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -10,12 +10,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Label } from '../components/ui/label';
 import { toast } from 'sonner';
+import { RichTextEditor } from '../components/ui/RichTextEditor';
 
 export default function SubmitIssue() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [projects, setProjects] = useState<ProjectRequest[]>([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -25,7 +27,19 @@ export default function SubmitIssue() {
     actualBehavior: '',
     environment: '',
     priority: 'medium' as 'low' | 'medium' | 'high' | 'critical',
+    projectTitle: user?.projectTitle || '',
   });
+
+  useEffect(() => {
+    if (user) {
+      mockDb.getProjectRequests(user.uid).then(data => {
+        setProjects(data);
+        if (data.length > 0 && !formData.projectTitle) {
+          setFormData(prev => ({ ...prev, projectTitle: data[0].title }));
+        }
+      });
+    }
+  }, [user]);
 
   const [imageUrl, setImageUrl] = useState('');
   const [images, setImages] = useState<string[]>([]);
@@ -58,8 +72,16 @@ export default function SubmitIssue() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleDescriptionChange = (value: string) => {
+    setFormData({ ...formData, description: value });
+  };
+
   const handleSelectChange = (value: string) => {
     setFormData({ ...formData, priority: value as any });
+  };
+
+  const handleProjectChange = (value: string) => {
+    setFormData({ ...formData, projectTitle: value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,7 +98,6 @@ export default function SubmitIssue() {
         status: 'open',
         userId: user.uid,
         authorName: user.displayName || user.email || 'Unknown User',
-        projectTitle: user.projectTitle,
         images,
         videoLinks
       });
@@ -99,20 +120,20 @@ export default function SubmitIssue() {
     <div className="max-w-3xl mx-auto animate-in fade-in duration-500">
       <button 
         onClick={() => navigate('/dashboard')}
-        className="mb-6 flex items-center text-sm font-medium text-zinc-500 hover:text-primary transition-colors"
+        className="mb-6 flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
       >
         <ArrowLeft className="mr-1.5 h-4 w-4" />
         Back to Dashboard
       </button>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold font-heading text-zinc-900 flex items-center tracking-tight">
+        <h1 className="text-3xl font-bold font-heading text-foreground flex items-center tracking-tight">
           <div className="bg-red-50 p-2 rounded-lg mr-3 border border-red-100">
             <Bug className="h-6 w-6 text-red-600" />
           </div>
           Report an Issue
         </h1>
-        <p className="mt-2 text-zinc-500 text-lg">
+        <p className="mt-2 text-muted-foreground text-lg">
           Please provide as much detail as possible to help us reproduce and fix the bug.
         </p>
       </div>
@@ -125,8 +146,8 @@ export default function SubmitIssue() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-zinc-200 shadow-sm">
-          <CardHeader className="bg-zinc-50/50 border-b border-zinc-100">
+        <Card className="border-border shadow-sm">
+          <CardHeader className="bg-muted/50 border-b border-border">
             <CardTitle className="font-heading">Issue Details</CardTitle>
             <CardDescription>Fields marked with an asterisk (*) are required.</CardDescription>
           </CardHeader>
@@ -144,30 +165,45 @@ export default function SubmitIssue() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
-              <Select value={formData.priority} onValueChange={handleSelectChange}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low - Minor issue, workaround available</SelectItem>
-                  <SelectItem value="medium">Medium - Standard issue</SelectItem>
-                  <SelectItem value="high">High - Major functionality broken</SelectItem>
-                  <SelectItem value="critical">Critical - System down, data loss</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="projectTitle">Project <span className="text-red-500">*</span></Label>
+                <Select value={formData.projectTitle} onValueChange={handleProjectChange} required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a project" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects.map(project => (
+                      <SelectItem key={project.id} value={project.title}>{project.title}</SelectItem>
+                    ))}
+                    {projects.length === 0 && user?.projectTitle && (
+                      <SelectItem value={user.projectTitle}>{user.projectTitle}</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="priority">Priority</Label>
+                <Select value={formData.priority} onValueChange={handleSelectChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low - Minor issue, workaround available</SelectItem>
+                    <SelectItem value="medium">Medium - Standard issue</SelectItem>
+                    <SelectItem value="high">High - Major functionality broken</SelectItem>
+                    <SelectItem value="critical">Critical - System down, data loss</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="description">General Description <span className="text-red-500">*</span></Label>
-              <Textarea
-                id="description"
-                name="description"
-                rows={3}
-                required
+              <RichTextEditor
                 value={formData.description}
-                onChange={handleChange}
+                onChange={handleDescriptionChange}
                 placeholder="Briefly describe what happened..."
               />
             </div>
@@ -225,8 +261,8 @@ export default function SubmitIssue() {
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-200 shadow-sm">
-          <CardHeader className="bg-zinc-50/50 border-b border-zinc-100">
+        <Card className="border-border shadow-sm">
+          <CardHeader className="bg-muted/50 border-b border-border">
             <CardTitle className="font-heading">Media & Links</CardTitle>
             <CardDescription>Attach screenshots or video links to help us visualize the issue.</CardDescription>
           </CardHeader>
@@ -235,7 +271,7 @@ export default function SubmitIssue() {
               <Label>Images (URLs)</Label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     placeholder="Paste image URL here..." 
                     className="pl-10"
@@ -252,7 +288,7 @@ export default function SubmitIssue() {
               {images.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
                   {images.map((url, index) => (
-                    <div key={index} className="relative group rounded-lg overflow-hidden border border-zinc-200 aspect-video bg-zinc-100">
+                    <div key={index} className="relative group rounded-lg overflow-hidden border border-border aspect-video bg-muted">
                       <img src={url} alt={`Attachment ${index}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       <button 
                         type="button"
@@ -271,7 +307,7 @@ export default function SubmitIssue() {
               <Label>Video Links</Label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Video className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <Video className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     placeholder="Paste Loom, YouTube, or Drive link..." 
                     className="pl-10"
@@ -288,15 +324,15 @@ export default function SubmitIssue() {
               {videoLinks.length > 0 && (
                 <div className="space-y-2 mt-4">
                   {videoLinks.map((url, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-zinc-50 rounded-lg border border-zinc-100">
+                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded-lg border border-border">
                       <div className="flex items-center gap-2 truncate">
-                        <Video className="h-4 w-4 text-zinc-400" />
-                        <span className="text-sm text-zinc-600 truncate">{url}</span>
+                        <Video className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground truncate">{url}</span>
                       </div>
                       <button 
                         type="button"
                         onClick={() => removeVideo(index)}
-                        className="text-zinc-400 hover:text-red-600 p-1"
+                        className="text-muted-foreground hover:text-red-600 p-1"
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -306,7 +342,7 @@ export default function SubmitIssue() {
               )}
             </div>
           </CardContent>
-          <CardFooter className="flex justify-end gap-3 border-t border-zinc-100 pt-6 bg-zinc-50/50 rounded-b-xl">
+          <CardFooter className="flex justify-end gap-3 border-t border-border pt-6 bg-muted/50 rounded-b-xl">
             <Button type="button" variant="outline" onClick={() => navigate('/dashboard')}>
               Cancel
             </Button>

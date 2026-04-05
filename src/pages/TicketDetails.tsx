@@ -179,7 +179,7 @@ export default function TicketDetails() {
       case 'resolved':
         return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Resolved</Badge>;
       case 'closed':
-        return <Badge variant="outline" className="bg-zinc-100 text-zinc-700 border-zinc-200">Closed</Badge>;
+        return <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Closed</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -188,7 +188,7 @@ export default function TicketDetails() {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'low':
-        return <Badge variant="secondary" className="bg-zinc-100 text-zinc-700">Low</Badge>;
+        return <Badge variant="secondary" className="bg-muted text-muted-foreground">Low</Badge>;
       case 'medium':
         return <Badge variant="secondary" className="bg-blue-100 text-blue-700">Medium</Badge>;
       case 'high':
@@ -204,14 +204,14 @@ export default function TicketDetails() {
     <div className="max-w-4xl mx-auto animate-in fade-in duration-500">
       <button 
         onClick={() => navigate('/dashboard')}
-        className="mb-6 flex items-center text-sm font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
+        className="mb-6 flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="mr-1.5 h-4 w-4" />
         Back to Dashboard
       </button>
 
-      <Card className="mb-8 border-zinc-200 shadow-sm overflow-hidden">
-        <div className="bg-zinc-50/50 px-6 py-4 border-b border-zinc-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <Card className="mb-8 border-border shadow-sm overflow-hidden">
+        <div className="bg-muted/50 px-6 py-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
             <div className={cn(
               "p-2 rounded-lg",
@@ -224,10 +224,10 @@ export default function TicketDetails() {
               )}
             </div>
             <div>
-              <h1 className="text-xl font-bold font-heading text-zinc-900 tracking-tight">
+              <h1 className="text-xl font-bold font-heading text-foreground tracking-tight">
                 {ticket.title}
               </h1>
-              <div className="flex items-center text-sm text-zinc-500 mt-1">
+              <div className="flex items-center text-sm text-muted-foreground mt-1">
                 <Clock className="mr-1.5 h-3.5 w-3.5" />
                 Submitted on {ticket.createdAt ? format(new Date(ticket.createdAt), 'PPP') : 'Recently'}
               </div>
@@ -237,11 +237,11 @@ export default function TicketDetails() {
             {getStatusBadge(ticket.status)}
             {getPriorityBadge(ticket.priority)}
             {ticket.status !== 'closed' ? (
-              <Button variant="outline" size="sm" onClick={handleCloseTicket} className="ml-2 border-zinc-200 hover:bg-zinc-100">
+              <Button variant="outline" size="sm" onClick={handleCloseTicket} className="ml-2 border-border hover:bg-muted">
                 Close Ticket
               </Button>
             ) : (
-              <Button variant="outline" size="sm" onClick={handleReopenTicket} className="ml-2 border-zinc-200 hover:bg-zinc-100">
+              <Button variant="outline" size="sm" onClick={handleReopenTicket} className="ml-2 border-border hover:bg-muted">
                 Reopen Ticket
               </Button>
             )}
@@ -252,44 +252,45 @@ export default function TicketDetails() {
         </div>
         
         <CardContent className="p-0">
-          <dl className="divide-y divide-zinc-100">
+          <dl className="divide-y divide-border">
             <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <dt className="text-sm font-medium text-zinc-500">Description</dt>
-              <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap leading-relaxed">
-                {ticket.description}
-              </dd>
+              <dt className="text-sm font-medium text-muted-foreground">Description</dt>
+              <dd 
+                className="text-sm text-foreground md:col-span-2 leading-relaxed prose prose-sm max-w-none quill-content"
+                dangerouslySetInnerHTML={{ __html: ticket.description }}
+              />
             </div>
             
             {ticket.type === 'issue' && (
               <>
                 {ticket.stepsToReproduce && (
-                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-zinc-50/30">
-                    <dt className="text-sm font-medium text-zinc-500">Steps to Reproduce</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap font-mono bg-zinc-100/50 p-3 rounded-md border border-zinc-200/50">
+                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-muted/30">
+                    <dt className="text-sm font-medium text-muted-foreground">Steps to Reproduce</dt>
+                    <dd className="text-sm text-foreground md:col-span-2 whitespace-pre-wrap font-mono bg-muted/50 p-3 rounded-md border border-border/50">
                       {ticket.stepsToReproduce}
                     </dd>
                   </div>
                 )}
                 {ticket.expectedBehavior && (
                   <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <dt className="text-sm font-medium text-zinc-500">Expected Behavior</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap leading-relaxed">
+                    <dt className="text-sm font-medium text-muted-foreground">Expected Behavior</dt>
+                    <dd className="text-sm text-foreground md:col-span-2 whitespace-pre-wrap leading-relaxed">
                       {ticket.expectedBehavior}
                     </dd>
                   </div>
                 )}
                 {ticket.actualBehavior && (
-                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-zinc-50/30">
-                    <dt className="text-sm font-medium text-zinc-500">Actual Behavior</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap leading-relaxed">
+                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-muted/30">
+                    <dt className="text-sm font-medium text-muted-foreground">Actual Behavior</dt>
+                    <dd className="text-sm text-foreground md:col-span-2 whitespace-pre-wrap leading-relaxed">
                       {ticket.actualBehavior}
                     </dd>
                   </div>
                 )}
                 {ticket.environment && (
                   <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <dt className="text-sm font-medium text-zinc-500">Environment</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2">
+                    <dt className="text-sm font-medium text-muted-foreground">Environment</dt>
+                    <dd className="text-sm text-foreground md:col-span-2">
                       {ticket.environment}
                     </dd>
                   </div>
@@ -300,17 +301,17 @@ export default function TicketDetails() {
             {ticket.type === 'enhancement' && (
               <>
                 {ticket.useCase && (
-                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-zinc-50/30">
-                    <dt className="text-sm font-medium text-zinc-500">Use Case</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap leading-relaxed">
+                  <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4 bg-muted/30">
+                    <dt className="text-sm font-medium text-muted-foreground">Use Case</dt>
+                    <dd className="text-sm text-foreground md:col-span-2 whitespace-pre-wrap leading-relaxed">
                       {ticket.useCase}
                     </dd>
                   </div>
                 )}
                 {ticket.proposedSolution && (
                   <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <dt className="text-sm font-medium text-zinc-500">Proposed Solution</dt>
-                    <dd className="text-sm text-zinc-900 md:col-span-2 whitespace-pre-wrap leading-relaxed">
+                    <dt className="text-sm font-medium text-muted-foreground">Proposed Solution</dt>
+                    <dd className="text-sm text-foreground md:col-span-2 whitespace-pre-wrap leading-relaxed">
                       {ticket.proposedSolution}
                     </dd>
                   </div>
@@ -320,11 +321,11 @@ export default function TicketDetails() {
 
             {/* Media Attachments */}
             {(ticket.images && ticket.images.length > 0) || (ticket.videoLinks && ticket.videoLinks.length > 0) ? (
-              <div className="px-6 py-5 border-t border-zinc-100 space-y-6">
+              <div className="px-6 py-5 border-t border-border space-y-6">
                 {ticket.images && ticket.images.length > 0 && (
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
-                      <ImageIcon className="w-4 h-4 text-zinc-400" />
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                      <ImageIcon className="w-4 h-4 text-muted-foreground" />
                       Images
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -334,7 +335,7 @@ export default function TicketDetails() {
                           href={url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="relative group rounded-lg overflow-hidden border border-zinc-200 aspect-video bg-zinc-50 hover:border-primary transition-colors"
+                          className="relative group rounded-lg overflow-hidden border border-border aspect-video bg-muted hover:border-primary transition-colors"
                         >
                           <img src={url} alt={`Attachment ${index}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -348,8 +349,8 @@ export default function TicketDetails() {
 
                 {ticket.videoLinks && ticket.videoLinks.length > 0 && (
                   <div className="space-y-3">
-                    <h3 className="text-sm font-semibold text-zinc-900 uppercase tracking-wider flex items-center gap-2">
-                      <Video className="w-4 h-4 text-zinc-400" />
+                    <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider flex items-center gap-2">
+                      <Video className="w-4 h-4 text-muted-foreground" />
                       Video Links
                     </h3>
                     <div className="space-y-2">
@@ -359,13 +360,13 @@ export default function TicketDetails() {
                           href={url} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg border border-zinc-100 hover:bg-secondary hover:border-primary transition-all group"
+                          className="flex items-center justify-between p-3 bg-muted rounded-lg border border-border hover:bg-secondary hover:border-primary transition-all group"
                         >
                           <div className="flex items-center gap-3 truncate">
-                            <Video className="h-4 w-4 text-zinc-400 group-hover:text-primary" />
-                            <span className="text-sm text-zinc-600 truncate group-hover:text-primary">{url}</span>
+                            <Video className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                            <span className="text-sm text-muted-foreground truncate group-hover:text-primary">{url}</span>
                           </div>
-                          <ExternalLink className="h-4 w-4 text-zinc-300 group-hover:text-primary" />
+                          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
                         </a>
                       ))}
                     </div>
@@ -379,11 +380,11 @@ export default function TicketDetails() {
 
       {/* Attachments Section */}
       {(ticket.attachments && ticket.attachments.length > 0 || user?.role === 'admin') && (
-        <Card className="mb-8 border-zinc-200 shadow-sm overflow-hidden">
-          <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 pb-4 flex flex-row items-center justify-between">
+        <Card className="mb-8 border-border shadow-sm overflow-hidden">
+          <CardHeader className="bg-muted/50 border-b border-border pb-4 flex flex-row items-center justify-between">
             <div>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Paperclip className="h-5 w-5 text-zinc-500" />
+                <Paperclip className="h-5 w-5 text-muted-foreground" />
                 Documents & Agreements
               </CardTitle>
               <CardDescription>Files attached to this request.</CardDescription>
@@ -401,24 +402,24 @@ export default function TicketDetails() {
           </CardHeader>
           <CardContent className="p-6">
             {!ticket.attachments || ticket.attachments.length === 0 ? (
-              <div className="text-center py-6 text-zinc-500 text-sm">
+              <div className="text-center py-6 text-muted-foreground text-sm">
                 No documents or agreements have been attached yet.
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {ticket.attachments.map((attachment) => (
-                  <div key={attachment.id} className="flex items-start p-3 rounded-lg border border-zinc-200 hover:border-primary hover:bg-secondary/50 transition-colors cursor-pointer group">
+                  <div key={attachment.id} className="flex items-start p-3 rounded-lg border border-border hover:border-primary hover:bg-secondary/50 transition-colors cursor-pointer group">
                     <div className={cn(
                       "p-2 rounded-md mr-3 shrink-0",
-                      attachment.type === 'agreement' ? "bg-amber-100 text-amber-700" : "bg-zinc-100 text-zinc-700"
+                      attachment.type === 'agreement' ? "bg-amber-100 text-amber-700" : "bg-muted text-muted-foreground"
                     )}>
                       {attachment.type === 'agreement' ? <FileSignature className="h-5 w-5" /> : <FileText className="h-5 w-5" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-zinc-900 truncate group-hover:text-primary transition-colors">
+                      <p className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">
                         {attachment.name}
                       </p>
-                      <p className="text-xs text-zinc-500 mt-0.5">
+                      <p className="text-xs text-muted-foreground mt-0.5">
                         Added {format(new Date(attachment.createdAt), 'MMM d, yyyy')}
                       </p>
                     </div>
@@ -431,8 +432,8 @@ export default function TicketDetails() {
       )}
 
       {/* Comments Section */}
-      <Card className="border-zinc-200 shadow-sm overflow-hidden">
-        <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 pb-4">
+      <Card className="border-border shadow-sm overflow-hidden">
+        <CardHeader className="bg-muted/50 border-b border-border pb-4">
           <CardTitle className="text-lg">Communication History</CardTitle>
           <CardDescription>Updates and discussions regarding this ticket.</CardDescription>
         </CardHeader>
@@ -440,31 +441,31 @@ export default function TicketDetails() {
         <CardContent className="p-6">
           <div className="space-y-8">
             {!ticket.comments || ticket.comments.length === 0 ? (
-              <div className="text-center py-8 text-zinc-500">
+              <div className="text-center py-8 text-muted-foreground">
                 <p>No comments yet. Be the first to reply!</p>
               </div>
             ) : (
               ticket.comments.map((comment, index) => (
                 <div key={comment.id} className="relative">
                   {index !== ticket.comments.length - 1 && (
-                    <div className="absolute top-10 left-5 -ml-px h-full w-0.5 bg-zinc-200" aria-hidden="true" />
+                    <div className="absolute top-10 left-5 -ml-px h-full w-0.5 bg-border" aria-hidden="true" />
                   )}
                   <div className="relative flex items-start space-x-4">
-                    <Avatar className="h-10 w-10 border border-zinc-200 shadow-sm">
-                      <AvatarFallback className="bg-zinc-100 text-zinc-600">
+                    <Avatar className="h-10 w-10 border border-border shadow-sm">
+                      <AvatarFallback className="bg-muted text-muted-foreground">
                         <UserIcon className="h-5 w-5" />
                       </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <div>
-                        <div className="text-sm font-medium text-zinc-900">
+                        <div className="text-sm font-medium text-foreground">
                           {comment.authorName}
                         </div>
-                        <p className="mt-0.5 text-xs text-zinc-500">
+                        <p className="mt-0.5 text-xs text-muted-foreground">
                           {comment.createdAt ? format(new Date(comment.createdAt), 'PPp') : 'Just now'}
                         </p>
                       </div>
-                      <div className="mt-2 text-sm text-zinc-700 whitespace-pre-wrap bg-zinc-50 rounded-lg p-3 border border-zinc-100">
+                      <div className="mt-2 text-sm text-foreground whitespace-pre-wrap bg-muted rounded-lg p-3 border border-border">
                         <p>{comment.text}</p>
                       </div>
                     </div>
@@ -476,9 +477,9 @@ export default function TicketDetails() {
         </CardContent>
 
         {ticket.status !== 'closed' && (
-          <CardFooter className="bg-zinc-50/80 px-6 py-5 border-t border-zinc-100">
+          <CardFooter className="bg-muted/50 px-6 py-5 border-t border-border">
             <div className="flex space-x-4 w-full">
-              <Avatar className="h-10 w-10 border border-zinc-200 shadow-sm hidden sm:block">
+              <Avatar className="h-10 w-10 border border-border shadow-sm hidden sm:block">
                 {user?.photoURL ? (
                   <AvatarImage src={user.photoURL} referrerPolicy="no-referrer" />
                 ) : null}
@@ -492,7 +493,7 @@ export default function TicketDetails() {
                     id="comment"
                     name="comment"
                     rows={3}
-                    className="resize-none bg-white border-zinc-200 focus-visible:ring-primary"
+                    className="resize-none bg-background border-border focus-visible:ring-primary"
                     placeholder="Add a comment or provide more info..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}

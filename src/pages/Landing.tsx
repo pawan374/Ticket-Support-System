@@ -4,14 +4,12 @@ import { Navigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { CheckCircle2, ArrowRight, Mail, Lock, User as UserIcon } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Mail, Lock } from 'lucide-react';
 
 export default function Landing() {
-  const { user, signIn, signInWithEmail, signUpWithEmail, isSigningIn } = useAuth();
+  const { user, signIn, signInWithEmail, isSigningIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [isSignUp, setIsSignUp] = useState(false);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
@@ -21,11 +19,7 @@ export default function Landing() {
     e.preventDefault();
     if (!email || !password) return;
     
-    if (isSignUp) {
-      await signUpWithEmail(email, password, displayName);
-    } else {
-      await signInWithEmail(email, password);
-    }
+    await signInWithEmail(email, password);
   };
 
   return (
@@ -33,8 +27,8 @@ export default function Landing() {
       {/* Left Side - Branding & Info */}
       <div className="hidden lg:flex lg:w-1/2 bg-primary p-12 flex-col justify-between text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-white blur-3xl"></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-white blur-3xl"></div>
+          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-background blur-3xl"></div>
+          <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-background blur-3xl"></div>
         </div>
         
         <div className="relative z-10">
@@ -89,38 +83,20 @@ export default function Landing() {
 
         <div className="mx-auto w-full max-w-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold font-heading text-zinc-900 tracking-tight mb-2">
-              {isSignUp ? 'Create an account' : 'Welcome back'}
+            <h2 className="text-3xl font-bold font-heading text-foreground tracking-tight mb-2">
+              Welcome back
             </h2>
-            <p className="text-zinc-500">
-              {isSignUp ? 'Sign up to get started' : 'Sign in to your account to continue'}
+            <p className="text-muted-foreground">
+              Sign in to your account to continue
             </p>
           </div>
 
           <div className="space-y-6">
             <form onSubmit={handleEmailAuth} className="space-y-4">
-              {isSignUp && (
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <div className="relative">
-                    <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
-                    <Input 
-                      id="name" 
-                      type="text" 
-                      placeholder="John Doe" 
-                      className="pl-10"
-                      value={displayName}
-                      onChange={(e) => setDisplayName(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-              )}
-              
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     id="email" 
                     type="email" 
@@ -134,9 +110,11 @@ export default function Landing() {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                </div>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input 
                     id="password" 
                     type="password" 
@@ -161,7 +139,7 @@ export default function Landing() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <span>{isSignUp ? 'Sign Up' : 'Sign In'}</span>
+                    <span>Sign In</span>
                     <ArrowRight className="h-4 w-4" />
                   </div>
                 )}
@@ -170,16 +148,16 @@ export default function Landing() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-zinc-200"></span>
+                <span className="w-full border-t border-border"></span>
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-zinc-500">Or continue with</span>
+                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
             <Button 
               variant="outline" 
-              className="w-full border-zinc-200 h-11 font-medium hover:bg-zinc-50"
+              className="w-full border-border h-11 font-medium hover:bg-muted"
               onClick={signIn}
               disabled={isSigningIn}
             >
@@ -204,21 +182,8 @@ export default function Landing() {
               Google
             </Button>
           </div>
-          
-          <div className="mt-6 text-center text-sm">
-            <span className="text-zinc-500">
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}
-            </span>{' '}
-            <button 
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-primary font-medium hover:underline"
-            >
-              {isSignUp ? 'Sign in' : 'Sign up'}
-            </button>
-          </div>
 
-          <p className="mt-8 text-center text-xs text-zinc-400">
+          <p className="mt-8 text-center text-xs text-muted-foreground">
             Need help? <a href="mailto:support@awecode.com" className="text-primary font-medium hover:underline">Contact Awecode Support</a>
           </p>
         </div>

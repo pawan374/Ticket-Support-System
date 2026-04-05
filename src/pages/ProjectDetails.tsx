@@ -77,7 +77,7 @@ export default function ProjectDetails() {
   if (!project) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-zinc-900">Project not found</h2>
+        <h2 className="text-2xl font-bold text-foreground">Project not found</h2>
         <Button variant="link" onClick={() => navigate(-1)} className="mt-4">Go back</Button>
       </div>
     );
@@ -97,7 +97,7 @@ export default function ProjectDetails() {
     <div className="max-w-4xl mx-auto space-y-6">
       <button 
         onClick={() => navigate(-1)}
-        className="flex items-center text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+        className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-1" />
         Back
@@ -106,12 +106,12 @@ export default function ProjectDetails() {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold font-heading text-zinc-900">{project.title}</h1>
+            <h1 className="text-3xl font-bold font-heading text-foreground">{project.title}</h1>
             <span className={cn("px-2.5 py-0.5 rounded-full text-xs font-medium border", statusColors[project.status])}>
               {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
             </span>
           </div>
-          <p className="text-zinc-500">Requested by {project.clientName} on {new Date(project.createdAt).toLocaleDateString()}</p>
+          <p className="text-muted-foreground">Requested by {project.clientName} on {new Date(project.createdAt).toLocaleDateString()}</p>
         </div>
         
         {isAdmin && project.status === 'pending' && (
@@ -126,26 +126,32 @@ export default function ProjectDetails() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <FileText className="w-5 h-5 text-zinc-400" />
+                <FileText className="w-5 h-5 text-muted-foreground" />
                 Project Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <h3 className="text-sm font-medium text-zinc-900 mb-1">Description</h3>
-                <p className="text-zinc-700 whitespace-pre-wrap">{project.description}</p>
+                <h3 className="text-sm font-medium text-foreground mb-1">Description</h3>
+                <div 
+                  className="text-foreground leading-relaxed prose prose-sm max-w-none quill-content"
+                  dangerouslySetInnerHTML={{ __html: project.description }}
+                />
               </div>
               <div>
-                <h3 className="text-sm font-medium text-zinc-900 mb-1">Requirements</h3>
-                <p className="text-zinc-700 whitespace-pre-wrap">{project.requirements}</p>
+                <h3 className="text-sm font-medium text-foreground mb-1">Requirements</h3>
+                <div 
+                  className="text-foreground leading-relaxed prose prose-sm max-w-none quill-content"
+                  dangerouslySetInnerHTML={{ __html: project.requirements }}
+                />
               </div>
             </CardContent>
           </Card>
 
           {/* Proposal Section */}
           {(project.proposal || isAdmin) && (
-            <Card className={cn("border-2", project.status === 'proposed' ? 'border-primary/50' : 'border-zinc-200')}>
-              <CardHeader className="bg-zinc-50/50">
+            <Card className={cn("border-2", project.status === 'proposed' ? 'border-primary/50' : 'border-border')}>
+              <CardHeader className="bg-muted/50">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Briefcase className="w-5 h-5 text-primary" />
                   Awecode Proposal
@@ -158,35 +164,35 @@ export default function ProjectDetails() {
                 {isAdmin && (project.status === 'pending' || project.status === 'reviewing' || project.status === 'proposed') ? (
                   <form onSubmit={handleProposalSubmit} className="space-y-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-zinc-900">Estimated Timeline</label>
+                      <label className="text-sm font-medium text-foreground">Estimated Timeline</label>
                       <input
                         type="text"
                         required
                         value={proposalData.timeline}
                         onChange={e => setProposalData({...proposalData, timeline: e.target.value})}
-                        className="flex h-10 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                        className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
                         placeholder="e.g., 4-6 weeks"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-zinc-900">Pricing / Budget</label>
+                      <label className="text-sm font-medium text-foreground">Pricing / Budget</label>
                       <input
                         type="text"
                         required
                         value={proposalData.pricing}
                         onChange={e => setProposalData({...proposalData, pricing: e.target.value})}
-                        className="flex h-10 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                        className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
                         placeholder="e.g., $8,500 total"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-zinc-900">Additional Notes / Terms</label>
+                      <label className="text-sm font-medium text-foreground">Additional Notes / Terms</label>
                       <textarea
                         required
                         rows={4}
                         value={proposalData.notes}
                         onChange={e => setProposalData({...proposalData, notes: e.target.value})}
-                        className="flex w-full rounded-md border border-zinc-300 px-3 py-2 text-sm"
+                        className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
                         placeholder="Include any assumptions, phases, or terms here."
                       />
                     </div>
@@ -197,28 +203,28 @@ export default function ProjectDetails() {
                 ) : project.proposal ? (
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-100">
-                        <div className="flex items-center gap-2 text-sm font-medium text-zinc-500 mb-1">
+                      <div className="bg-muted p-4 rounded-lg border border-border">
+                        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-1">
                           <Clock className="w-4 h-4" /> Timeline
                         </div>
-                        <p className="font-medium text-zinc-900">{project.proposal.timeline}</p>
+                        <p className="font-medium text-foreground">{project.proposal.timeline}</p>
                       </div>
-                      <div className="bg-zinc-50 p-4 rounded-lg border border-zinc-100">
-                        <div className="flex items-center gap-2 text-sm font-medium text-zinc-500 mb-1">
+                      <div className="bg-muted p-4 rounded-lg border border-border">
+                        <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-1">
                           <DollarSign className="w-4 h-4" /> Pricing
                         </div>
-                        <p className="font-medium text-zinc-900">{project.proposal.pricing}</p>
+                        <p className="font-medium text-foreground">{project.proposal.pricing}</p>
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-zinc-900 mb-2">Notes & Terms</h3>
-                      <p className="text-zinc-700 whitespace-pre-wrap bg-zinc-50 p-4 rounded-lg border border-zinc-100">
+                      <h3 className="text-sm font-medium text-foreground mb-2">Notes & Terms</h3>
+                      <p className="text-foreground whitespace-pre-wrap bg-muted p-4 rounded-lg border border-border">
                         {project.proposal.notes}
                       </p>
                     </div>
 
                     {!isAdmin && project.status === 'proposed' && (
-                      <div className="flex gap-3 pt-4 border-t border-zinc-100">
+                      <div className="flex gap-3 pt-4 border-t border-border">
                         <Button 
                           onClick={() => handleStatusChange('accepted')} 
                           disabled={isSubmitting}
@@ -238,7 +244,7 @@ export default function ProjectDetails() {
                     )}
                   </div>
                 ) : (
-                  <p className="text-zinc-500 italic">Awaiting proposal from Awecode.</p>
+                  <p className="text-muted-foreground italic">Awaiting proposal from Awecode.</p>
                 )}
               </CardContent>
             </Card>
@@ -252,16 +258,16 @@ export default function ProjectDetails() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-zinc-500 mb-1">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-1">
                   <DollarSign className="w-4 h-4" /> Budget Range
                 </div>
-                <p className="text-zinc-900">{project.budget || 'Not specified'}</p>
+                <p className="text-foreground">{project.budget || 'Not specified'}</p>
               </div>
               <div>
-                <div className="flex items-center gap-2 text-sm font-medium text-zinc-500 mb-1">
+                <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-1">
                   <Calendar className="w-4 h-4" /> Target Deadline
                 </div>
-                <p className="text-zinc-900">{project.targetDeadline || 'Not specified'}</p>
+                <p className="text-foreground">{project.targetDeadline || 'Not specified'}</p>
               </div>
             </CardContent>
           </Card>

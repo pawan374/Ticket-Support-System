@@ -28,7 +28,18 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 import AdminDashboard from './pages/AdminDashboard';
 
 function AppRoutes() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+          <p className="text-muted-foreground font-medium animate-pulse">Initializing Awecode Support...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <Routes>
@@ -37,6 +48,7 @@ function AppRoutes() {
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="admin" element={<AdminDashboard />} />
+        <Route path="admin/:tab" element={<AdminDashboard />} />
         <Route path="submit-issue" element={<SubmitIssue />} />
         <Route path="submit-enhancement" element={<SubmitEnhancement />} />
         <Route path="request-project" element={<RequestProject />} />
@@ -48,14 +60,18 @@ function AppRoutes() {
   );
 }
 
+import { ThemeProvider } from './components/ThemeProvider';
+
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-        <Toaster />
-      </BrowserRouter>
-    </AuthProvider>
+    <ThemeProvider defaultTheme="system" storageKey="awecode-theme">
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRoutes />
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
